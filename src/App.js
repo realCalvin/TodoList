@@ -1,12 +1,23 @@
 import React, {Component} from 'react';
 import Todos from './todos'
 import AddTodo from './AddTask'
+import Cookies from 'js-cookie'
 
 class App extends Component{
   state = {
     todos: [
       
     ]
+  }
+  s = true;
+  componentDidMount(){
+    const c = Object.values(Cookies.get());
+    var obj = c.map(todo => {
+      return(JSON.parse(todo))
+    });
+    this.setState({
+      todos: obj
+    })
   }
   displayAlert(type){
     if(type === "error"){
@@ -17,6 +28,7 @@ class App extends Component{
     const todos = this.state.todos.filter(todo => {
       return todo.id !== id;
     })
+    Cookies.remove(id);
     this.setState({
       todos: todos
     })
@@ -37,15 +49,18 @@ class App extends Component{
       this.setState({
         todos: todos
       })
+      Cookies.set(todo.id, JSON.stringify(todo), { expires: 30 });
+      this.s = false;
     }else{
       this.displayAlert("error");
     }
   }
   render(){
+    console.log(this.state.todos)
     return (
       <div className="App container">
         <h1 className="center teal-text">Todo List</h1>
-        <Todos deleteTask={this.deleteTask} todos={this.state.todos}/>
+        <Todos deleteTask={this.deleteTask} todos={this.state.todos} s={this.s}/>
         <AddTodo addTask={this.addTask}/>
         <div id="alert" className="red-text text-lighten-1"></div>
       </div>
