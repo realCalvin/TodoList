@@ -8,7 +8,9 @@ class AddTodo extends Component{
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.addTask(this.state);
-
+        this.setState({
+            content: ''
+        })
     }
 
     handleChange = (e) => {
@@ -22,7 +24,8 @@ class AddTodo extends Component{
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <label>Add Task</label>
-                    <input type="text" onChange={this.handleChange}></input><button className="waves-effect waves-light btn-small">Submit</button>
+                    <input type="text" onChange={this.handleChange} value={this.state.content}></input>
+                    <button className="waves-effect waves-light btn-small">Submit</button>
                 </form>
             </div>
         )
